@@ -1,8 +1,9 @@
 name: Deploy Homepage
 
 on:
-  push:
-    branches: [main]
+  pull_request:
+    branches:
+    - main
     paths:
       - 'homepage/**'
       - 'understand-anything-plugin/packages/dashboard/**'
@@ -24,9 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-
+      - uses: pnpm/action-setup@v4        
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -52,7 +51,8 @@ jobs:
 
       - name: Merge demo into homepage output
         run: cp -r understand-anything-plugin/packages/dashboard/dist homepage/dist/demo
-
+      - name: Install Dependencies
+        run: npm install
       - uses: actions/upload-pages-artifact@v3
         with:
           path: homepage/dist
